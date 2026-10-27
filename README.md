@@ -32,3 +32,9 @@ Le centre de veille vérifie tous les lieux à l’ouverture, toutes les 30 minu
 Une fenêtre d’indice expérimental au moins égal à 60 déclenche une alerte dans l’interface. Ce seuil est provisoire. L’utilisateur peut activer ou désactiver les notifications du navigateur par un bouton dédié ; la permission n’est jamais demandée automatiquement. HTTPS et un navigateur compatible sont requis. Sur certains navigateurs mobiles, l’API Notification directe n’est pas disponible : l’interface conserve les alertes, mais un service worker sera nécessaire pour les notifications système.
 
 Les notifications sont limitées à une par lieu et par jour dans ce navigateur, avec mémorisation locale pendant 30 jours. L’effacement ou l’indisponibilité du stockage peut supprimer cette protection ; plusieurs onglets ne sont pas synchronisés. La fermeture de l’application interrompt la veille. Aucun e-mail ni Web Push n’est envoyé.
+
+## Géocodage et quotas
+
+La recherche française utilise en priorité `geo.api.gouv.fr/communes` (API Découpage administratif). En l'absence de commune française ou en cas de panne, la recherche internationale Open-Meteo est utilisée. L'altitude d'une commune n'est pas inventée : si elle est inconnue, le modèle météo la fournit lors du chargement des conditions.
+
+Le serveur partage un cache en mémoire borné à 500 URL : recherches pendant 24 heures, météo pendant 30 minutes, et réponses de quota 429 pendant une minute pour éviter les appels répétés. Les requêtes simultanées identiques sont regroupées. Le cache disparaît au redémarrage et n'est pas partagé entre instances. Il réduit la consommation sans garantir la disponibilité d'un quota Open-Meteo, notamment sur un hébergement à adresse IP partagée. Un besoin de disponibilité supérieure nécessitera de vérifier les conditions d'usage et une offre météo adaptée.

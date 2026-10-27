@@ -1,8 +1,10 @@
 import http from 'node:http';
+import {cachedFetch,searchPlaces} from './services.js';
 import {readFile} from 'node:fs/promises';
 import {pathToFileURL} from 'node:url';
 const endpoints = { search: 'https://geocoding-api.open-meteo.com/v1/search', weather: 'https://api.open-meteo.com/v1/forecast' };
 export function createServer(fetchUpstream=fetch) {
+const fetchCached=cachedFetch(fetchUpstream);
 return http.createServer(async (req,res) => {
   try {
     const url = new URL(req.url,'http://localhost');
@@ -19,7 +21,9 @@ return http.createServer(async (req,res) => {
         if(!url.searchParams.has('latitude') || !url.searchParams.has('longitude') || !Number.isFinite(lat)||!Number.isFinite(lon)||Math.abs(lat)>90||Math.abs(lon)>180) {res.writeHead(400).end('Coordonnées invalides');return;}
         upstream.search=new URLSearchParams({latitude:String(lat),longitude:String(lon),daily:'temperature_2m_max,temperature_2m_min,precipitation_sum,weather_code',hourly:'relative_humidity_2m',past_days:'14',forecast_days:'16',timezone:'auto'});
       }
-      const response=await fetchUpstream(upstream,{signal:AbortSignal.timeout(15000)});
+      const response=kind==='search'
+        ? await searchPlaces(upstream.searchParams.get('name'),fetchCached)
+        : await fetchCached(upstream,{signal:AbortSignal.timeout(15000)});
       if(!response.ok) {
         console.error(JSON.stringify({event:'upstream_http_error',service:kind,status:response.status}));
         const message=response.status===429

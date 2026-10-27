@@ -6,7 +6,7 @@ async function request(t,upstream,path='/api/search?name=Paris'){
  const server=createServer(upstream);server.listen(0,'127.0.0.1');await once(server,'listening');t.after(()=>new Promise(resolve=>server.close(resolve)));return fetch(`http://127.0.0.1:${server.address().port}${path}`);
 }
 test('search forwards city and returns results',async t=>{
- const r=await request(t,async url=>{assert.equal(url.hostname,'geocoding-api.open-meteo.com');assert.equal(url.searchParams.get('name'),'Paris');return Response.json({results:[{name:'Paris'}]});});
+ const r=await request(t,async url=>{assert.equal(url.hostname,'geo.api.gouv.fr');assert.equal(url.searchParams.get('nom'),'Paris');return Response.json([{nom:'Paris',code:'75056',centre:{coordinates:[2.35,48.85]}}]);});
  assert.equal(r.status,200);assert.equal((await r.json()).results[0].name,'Paris');
 });
 test('upstream quota is distinguished from client connectivity',async t=>{const r=await request(t,async()=>new Response('',{status:429}));assert.equal(r.status,429);assert.equal((await r.json()).code,'UPSTREAM_429');});
