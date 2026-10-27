@@ -1,3 +1,4 @@
+import {fetchWeather} from '/weather-client.js';
 import {buildAlert,unsentAlerts} from '/alerts.js';
 import {forecast} from '/forecast.js';
 const $=id=>document.getElementById(id);
@@ -16,7 +17,7 @@ const weatherCache=new Map();
 async function weather(p){
  const old=weatherCache.get(p.id);
  if(old && Date.now()-old.time<30*60*1000)return old.promise;
- const promise=api(`/api/weather?latitude=${p.latitude}&longitude=${p.longitude}`);
+ const promise=fetchWeather(p);
  weatherCache.set(p.id,{time:Date.now(),promise});
  try{return await promise;}catch(e){weatherCache.delete(p.id);throw e;}
 }
