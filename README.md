@@ -48,3 +48,7 @@ Validation : réponse réelle HTTP 200 avec `Access-Control-Allow-Origin: *` pou
 ## Révision grêle et traçabilité
 
 La pénalité grêle a été supprimée faute de justification vérifiée ; aucun bonus spécifique n'est ajouté. Un signal de grêle dans les 12 jours précédents reste visible. Chaque date dispose désormais d'un détail des contributions au score. Voir [l'état des sources et des limites](docs/SOURCES.md) : consultation d'un résumé scientifique, blogs encore bloqués par le réseau, absence de calibration prédictive. Cette révision ne constitue pas une validation scientifique du score.
+
+## Recherche approfondie
+
+Le document [Sources](docs/SOURCES.md) contient désormais huit articles de terrain effectivement lus et cinq résumés scientifiques pertinents, avec limites et décisions de modélisation. Le seuil supérieur de 80 mm qui réduisait arbitrairement les points de pluie est supprimé ; les autres coefficients restent expérimentaux. Les fenêtres scientifiques de 20 et 26 jours sont des pistes documentées, pas encore intégrées au score actuel à 12 jours.

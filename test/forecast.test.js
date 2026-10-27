@@ -22,3 +22,9 @@ test('hail on candidate day is not classified as an earlier trigger',()=>{
 test('contributions reproduce the displayed bounded score',()=>{
  for(const day of forecast(fixture(),'2026-10-15'))assert.equal(day.score,Math.min(100,Math.max(0,Object.values(day.contributions).reduce((a,b)=>a+b,0))));
 });
+
+test('rain contribution does not collapse above the old arbitrary 80 mm boundary',()=>{
+ const a=fixture(),b=fixture();a.daily.precipitation_sum.fill(80/12);b.daily.precipitation_sum.fill(81/12);
+ const x=forecast(a,'2026-10-15')[0],y=forecast(b,'2026-10-15')[0];
+ assert.equal(x.contributions.rain,40);assert.equal(y.contributions.rain,40);assert.ok(y.score>=x.score);
+});

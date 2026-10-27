@@ -15,7 +15,7 @@ export function forecast(data,today) {
   const shock=d.temperature_2m_max.slice(i-12,i).some((t,j,a)=>j>0&&t!=null&&a[j-1]!=null&&a[j-1]-t>=5);
   const hail=d.weather_code.slice(i-12,i).some(c=>c===96||c===99);
   const contributions={
-   rain:water>=20&&water<=80?40:water>=10?22:0,
+   rain:water>=20?40:water>=10?22:0,
    temperature:avg>=12&&avg<=24?30:avg>=8&&avg<=28?12:0,
    humidity:humid>=75?20:humid>=60?10:0,
    cooling:shock?10:0,
