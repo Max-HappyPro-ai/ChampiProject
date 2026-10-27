@@ -13,12 +13,20 @@ export function forecast(data,today) {
   const humidity=(data.hourly?.time||[]).flatMap((t,j)=>t.startsWith(date)&&data.hourly.relative_humidity_2m[j]!=null?[data.hourly.relative_humidity_2m[j]]:[]);
   const humid=humidity.length?humidity.reduce((a,b)=>a+b,0)/humidity.length:null;
   const shock=d.temperature_2m_max.slice(i-12,i).some((t,j,a)=>j>0&&t!=null&&a[j-1]!=null&&a[j-1]-t>=5);
-  const hail=d.weather_code.slice(i-3,i+1).some(c=>c===96||c===99);
-  let score=(water>=20&&water<=80?40:water>=10?22:0)+(avg>=12&&avg<=24?30:avg>=8&&avg<=28?12:0)+(humid>=75?20:humid>=60?10:0)+(shock?10:0);
-  if(mins.some(t=>t<=0))score-=40;
-  if(hail)score-=15;
+  const hail=d.weather_code.slice(i-12,i).some(c=>c===96||c===99);
+  const contributions={
+   rain:water>=20&&water<=80?40:water>=10?22:0,
+   temperature:avg>=12&&avg<=24?30:avg>=8&&avg<=28?12:0,
+   humidity:humid>=75?20:humid>=60?10:0,
+   cooling:shock?10:0,
+   frost:mins.some(t=>t<=0)?-40:0,
+   // Pas de poids spécifique établi pour la grêle. Éviter un bonus
+   // hydrique supplémentaire sans mesure séparée de son apport.
+   hail:0
+  };
+  let score=Object.values(contributions).reduce((a,b)=>a+b,0);
   score=Math.max(0,Math.min(100,score));
   const historicalDays=d.time.slice(i-12,i).filter(t=>t<today).length;
-  return [{date,horizon,historicalDays,forecastDays:12-historicalDays,score,water:Math.round(water),temp:Math.round(avg),humid:humid===null?null:Math.round(humid),shock,hail,confidence:horizon<=7?'Modérée':'Faible'}];
+  return [{date,horizon,contributions,historicalDays,forecastDays:12-historicalDays,score,water:Math.round(water),temp:Math.round(avg),humid:humid===null?null:Math.round(humid),shock,hail,confidence:horizon<=7?'Modérée':'Faible'}];
  });
 }
