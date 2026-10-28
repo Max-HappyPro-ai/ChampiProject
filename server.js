@@ -35,7 +35,7 @@ return http.createServer(async (req,res) => {
       }
       res.writeHead(200,{'Content-Type':'application/json','Cache-Control':'no-store'}).end(await response.text());return;
     }
-    const files={'/':'index.html','/app.js':'app.js','/style.css':'style.css','/forecast.js':'forecast.js','/episodes.js':'episodes.js','/history.js':'history.js','/alerts.js':'alerts.js','/weather-client.js':'weather-client.js'};
+    const files={'/':'index.html','/app.js':'app.js','/style.css':'style.css','/forecast.js':'forecast.js','/episodes.js':'episodes.js','/history.js':'history.js','/feedback.js':'feedback.js','/alerts.js':'alerts.js','/weather-client.js':'weather-client.js'};
     const file=files[url.pathname];
     if(!file) {res.writeHead(404).end();return;}
     res.writeHead(200,{'Content-Type':file.endsWith('.js')?'text/javascript':file.endsWith('.css')?'text/css':'text/html; charset=utf-8'}).end(await readFile(new URL(`./public/${file}`,import.meta.url)));

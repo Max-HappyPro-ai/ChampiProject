@@ -1,0 +1,11 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {normalizeOutcome,makeObservation,compareOutings,summarizeOutings} from '../public/feedback.js';
+const key=JSON.stringify(['p','2026-10-23']);
+const observation=makeObservation({result:'absent',date:'2026-10-23',today:'2026-10-28',reportedScore:82});
+test('82 with no discovery is flagged as a discrepancy without manufacturing an archive',()=>{const rows=compareOutings([],{[key]:observation},'p');assert.equal(rows[0].source,'reported');assert.equal(rows[0].mismatch,'high-absent');assert.equal(summarizeOutings(rows).find(g=>g.source==='reported').highAbsent,1);assert.equal(summarizeOutings(rows).find(g=>g.source==='archived').total,0);});
+test('genuine archive takes precedence over retrospective or remembered score',()=>{const records=[{placeId:'p',date:'2026-10-23',issueDate:'2026-10-22',issuedAt:'2026-10-22T10:00:00Z',score:40,model:'v1'}];const rows=compareOutings(records,{[key]:observation},'p',[{date:'2026-10-23',horizon:-5,score:90}]);assert.equal(rows[0].source,'archived');assert.equal(rows[0].score,40);assert.equal(rows[0].model,'v1');});
+test('retrospective matches remain separate and absent observations do not infer unseen sorties',()=>{const rows=compareOutings([],{[key]:'absent'},'p',[{date:'2026-10-23',horizon:-5,score:80},{date:'2026-10-24',horizon:-4,score:80}]);assert.equal(rows.length,1);assert.equal(rows[0].source,'retrospective');assert.equal(compareOutings([],{[key]:'absent'},'other').length,0);});
+test('legacy entries are preserved; unknown scores are not treated as zero',()=>{assert.equal(normalizeOutcome('present').result,'present');const r=compareOutings([],{[key]:'present'},'p')[0];assert.equal(r.score,null);assert.equal(r.mismatch,null);});
+test('invalid date, future observation, invalid score and effort are rejected',()=>{for(const overrides of [{date:'2026-02-30'},{date:'2026-10-29'},{reportedScore:101},{minutes:-1}])assert.throws(()=>makeObservation({result:'absent',date:'2026-10-23',today:'2026-10-28',...overrides}));});
+test('positive discovery at a low index is flagged too',()=>{const r=compareOutings([],{[key]:{result:'present',reportedScore:30}},'p')[0];assert.equal(r.mismatch,'low-present');});
