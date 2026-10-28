@@ -19,7 +19,7 @@ return http.createServer(async (req,res) => {
       } else {
         const lat=Number(url.searchParams.get('latitude')),lon=Number(url.searchParams.get('longitude'));
         if(!url.searchParams.has('latitude') || !url.searchParams.has('longitude') || !Number.isFinite(lat)||!Number.isFinite(lon)||Math.abs(lat)>90||Math.abs(lon)>180) {res.writeHead(400).end('Coordonnées invalides');return;}
-        upstream.search=new URLSearchParams({latitude:String(lat),longitude:String(lon),daily:'temperature_2m_max,temperature_2m_min,precipitation_sum,weather_code',hourly:'relative_humidity_2m',past_days:'14',forecast_days:'16',timezone:'auto'});
+        upstream.search=new URLSearchParams({latitude:String(lat),longitude:String(lon),daily:'temperature_2m_max,temperature_2m_min,precipitation_sum,weather_code',hourly:'relative_humidity_2m',past_days:'28',forecast_days:'16',timezone:'auto'});
       }
       const response=kind==='search'
         ? await searchPlaces(upstream.searchParams.get('name'),fetchCached)
@@ -35,7 +35,7 @@ return http.createServer(async (req,res) => {
       }
       res.writeHead(200,{'Content-Type':'application/json','Cache-Control':'no-store'}).end(await response.text());return;
     }
-    const files={'/':'index.html','/app.js':'app.js','/style.css':'style.css','/forecast.js':'forecast.js','/alerts.js':'alerts.js','/weather-client.js':'weather-client.js'};
+    const files={'/':'index.html','/app.js':'app.js','/style.css':'style.css','/forecast.js':'forecast.js','/episodes.js':'episodes.js','/alerts.js':'alerts.js','/weather-client.js':'weather-client.js'};
     const file=files[url.pathname];
     if(!file) {res.writeHead(404).end();return;}
     res.writeHead(200,{'Content-Type':file.endsWith('.js')?'text/javascript':file.endsWith('.css')?'text/css':'text/html; charset=utf-8'}).end(await readFile(new URL(`./public/${file}`,import.meta.url)));

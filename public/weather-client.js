@@ -2,7 +2,7 @@
 // Accès direct pour éviter de mutualiser tous les visiteurs derrière l'hébergeur.
 export async function fetchWeather(place,fetchImpl=fetch) {
  const url=new URL('https://api.open-meteo.com/v1/forecast');
- url.search=new URLSearchParams({latitude:String(place.latitude),longitude:String(place.longitude),daily:'temperature_2m_max,temperature_2m_min,precipitation_sum,weather_code',hourly:'relative_humidity_2m',past_days:'14',forecast_days:'16',timezone:'auto'});
+ url.search=new URLSearchParams({latitude:String(place.latitude),longitude:String(place.longitude),daily:'temperature_2m_max,temperature_2m_min,precipitation_sum,weather_code',hourly:'relative_humidity_2m',past_days:'28',forecast_days:'16',timezone:'auto'});
  let response;
  try{response=await fetchImpl(url,{signal:AbortSignal.timeout(15000)});}
  catch{throw Error('Impossible de joindre la météo depuis votre navigateur. Vérifiez votre connexion ou les extensions de blocage, puis réessayez.');}
@@ -11,4 +11,8 @@ export async function fetchWeather(place,fetchImpl=fetch) {
  const data=await response.json();
  if(!data.daily?.time?.length || !data.hourly?.time?.length)throw Error('Les données météo reçues sont incomplètes. Réessayez plus tard.');
  return data;
+}
+
+export function weatherDate(data,now=Date.now()) {
+ return new Date(now+(data.utc_offset_seconds||0)*1000).toISOString().slice(0,10);
 }

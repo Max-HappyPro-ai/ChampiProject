@@ -28,3 +28,12 @@ test('rain contribution does not collapse above the old arbitrary 80 mm boundary
  const x=forecast(a,'2026-10-15')[0],y=forecast(b,'2026-10-15')[0];
  assert.equal(x.contributions.rain,40);assert.equal(y.contributions.rain,40);assert.ok(y.score>=x.score);
 });
+
+test('thermal bonus requires an older persistent episode rather than any single cool day',()=>{
+ const d={daily:{time:Array.from({length:44},(_,i)=>new Date(Date.UTC(2026,8,i+1)).toISOString().slice(0,10)),temperature_2m_max:Array(44).fill(24),temperature_2m_min:Array(44).fill(16),precipitation_sum:Array(44).fill(0),weather_code:Array(44).fill(3)}};
+ for(let i=15;i<44;i++){d.daily.temperature_2m_max[i]=18;d.daily.temperature_2m_min[i]=10;}
+ d.daily.precipitation_sum[15]=15;
+ const day=forecast(d,'2026-09-29')[0];assert.equal(day.episode.age,14);assert.equal(day.contributions.cooling,10);
+ d.daily.temperature_2m_max[17]=24;d.daily.temperature_2m_min[17]=16;
+ const rebound=forecast(d,'2026-09-29')[0];assert.equal(rebound.episode,null);assert.equal(rebound.contributions.cooling,0);
+});

@@ -87,3 +87,7 @@ La pénalité −15 a été retirée. La grêle reste informative, sans bonus. L
 6. Recueillir les sorties avec présence **et absence**, dates, espèces et effort de prospection. Évaluer hors des lieux et années de calibration, avec comparaison à un calendrier saisonnier simple. Mesurer les fausses alertes et le délai réellement obtenu avant les poussées.
 
 Aucun nouveau coefficient n'est présenté comme validé par la seule accumulation d'articles de blog.
+
+## Transcription vidéo ajoutée le 28 octobre 2026
+
+La transcription fournie par l'utilisateur de [Z0kErGRgYSo](https://www.youtube.com/watch?v=Z0kErGRgYSo) a été lue. L'[analyse horodatée](VIDEO-Z0kErGRgYSo.md) distingue les propos du vidéaste, les limites, les choix techniques et les changements effectués : épisodes persistants et délai 10–15 jours, sans supposer une mesure du sol ni du potentiel mycélien. Les nouvelles valeurs de détection restent provisoires ; les mises en garde ci-dessus sur le bonus de refroidissement isolé sont remplacées par cette logique de séquence.

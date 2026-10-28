@@ -52,3 +52,7 @@ La pénalité grêle a été supprimée faute de justification vérifiée ; aucu
 ## Recherche approfondie
 
 Le document [Sources](docs/SOURCES.md) contient désormais huit articles de terrain effectivement lus et cinq résumés scientifiques pertinents, avec limites et décisions de modélisation. Le seuil supérieur de 80 mm qui réduisait arbitrairement les points de pluie est supprimé ; les autres coefficients restent expérimentaux. Les fenêtres scientifiques de 20 et 26 jours sont des pistes documentées, pas encore intégrées au score actuel à 12 jours.
+
+## Analyse de la vidéo et épisodes météo
+
+Voir [l'analyse de la transcription](docs/VIDEO-Z0kErGRgYSo.md). L'historique demandé est désormais de 28 jours ; le bilan affiché reste de 12 jours et les estimations vont de demain à J+14. Le bonus thermique (+10) exige désormais une séquence météo persistante située 10–15 jours avant la date candidate, plutôt qu'une simple chute isolée. Les seuils sur l'air sont des approximations documentées ; le sol et le stock mycélien ne sont pas mesurés. Aucun indice n'est une probabilité. L'interface n'affiche plus de niveau de confiance prétendument calibré.
