@@ -1,11 +1,11 @@
 import {detectEpisodes,episodeForDate} from './episodes.js';
 // Heuristique exploratoire, sans calibration sur des observations de poussées.
-export function forecast(data,today) {
+export function forecast(data,today,{includePast=false}={}) {
  const d=data.daily;
  const episodes=detectEpisodes(d,today);
  return d.time.flatMap((date,i)=>{
   const horizon=Math.round((Date.parse(date)-Date.parse(today))/86400000);
-  if(horizon<1||horizon>14||i<12)return [];
+  if(horizon<(includePast?-7:1)||horizon>14||i<12)return [];
   const rain=d.precipitation_sum.slice(i-12,i);
   const temps=d.temperature_2m_max.slice(i-12,i);
   const mins=d.temperature_2m_min.slice(i-12,i);

@@ -56,3 +56,13 @@ Le document [Sources](docs/SOURCES.md) contient désormais huit articles de terr
 ## Analyse de la vidéo et épisodes météo
 
 Voir [l'analyse de la transcription](docs/VIDEO-Z0kErGRgYSo.md). L'historique demandé est désormais de 28 jours ; le bilan affiché reste de 12 jours et les estimations vont de demain à J+14. Le bonus thermique (+10) exige désormais une séquence météo persistante située 10–15 jours avant la date candidate, plutôt qu'une simple chute isolée. Les seuils sur l'air sont des approximations documentées ; le sol et le stock mycélien ne sont pas mesurés. Aucun indice n'est une probabilité. L'interface n'affiche plus de niveau de confiance prétendument calibré.
+
+## Comparer une sortie aux estimations
+
+La vue inclut J−7 à J−1, aujourd'hui, puis J+1 à J+14. L'historique météo demandé passe à 35 jours pour conserver assez de recul avant les dates passées (détection des épisodes et contexte humide antérieur). Le bilan de chaque date reste de 12 jours.
+
+Les scores passés sont **recalculés avec les données disponibles aujourd'hui** et le modèle actuel ; ce ne sont pas des prévisions archivées ni une simulation de ce qui était connu à l'époque. Les données passées peuvent être révisées et ne sont pas des mesures sur la parcelle. Le jour actuel comprend encore des données prévues.
+
+À chaque consultation d'un lieu, les scores J+1 à J+14 sont désormais archivés localement avec date de consultation, date cible et version du modèle. La première consultation de chaque journée est conservée, pendant 60 jours. Pour une date passée, l'interface affiche la dernière archive antérieure à cette date, si elle existe. Aucun historique de prévisions antérieur à cette fonctionnalité n'est inventé. Les archives restent limitées à ce navigateur et peuvent être perdues si son stockage est effacé ou indisponible.
+
+Pour les dates passées et aujourd'hui, l'utilisateur peut noter « sortie effectuée, aucun cèpe trouvé » ou « cèpes trouvés », et effacer cette indication en revenant à « sortie non renseignée ». Les résultats sont associés au lieu et à la date et conservés localement. Ils ne changent pas automatiquement les scores ; une sortie négative ne prouve pas l'absence de cèpes dans toute la zone. L'historique et le jour actuel sont exclus des notifications et du résumé des prochaines fenêtres.
